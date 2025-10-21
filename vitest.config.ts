@@ -4,6 +4,11 @@ export default defineConfig({
   test: {
     include: ["tests/**/*.{test,spec}.ts", "tests/**/test_*.ts"],
     globals: true,
-    environment: "node"
+    environment: "node",
+    reporters: ["default"],
+    outputFile: {
+      junit: "./reports/junit.xml",
+      json: "./reports/test-summary.json",
+    },
   }
 });

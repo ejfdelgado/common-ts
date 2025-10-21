@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import { SimpleObj } from "../../src/objects/SimpleObj.js";
 import { sortify } from "../../src/objects/Sortify.js";
 
-describe("Get value Test", () => {
+describe("Get value", () => {
     const MY_CASES = [
         { name: "Read 1", obj: { a: 1 }, key: "a", val: 1 },
         { name: "Read 2", obj: { a: { b: 4 } }, key: "a.b", val: 4 },
@@ -29,7 +29,7 @@ describe("Get value Test", () => {
     }
 });
 
-describe("Set value Test", () => {
+describe("Set value", () => {
     const MY_CASES = [
         { name: "Write 1", obj: { a: 1 }, key: "a", val: 2, exp: { a: 2 } },
         { name: "Write 2", obj: { players: {} }, key: "players.P12", val: { name: "Edgar" }, exp: { players: { P12: { name: "Edgar" } } } },
