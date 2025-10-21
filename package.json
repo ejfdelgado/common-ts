@@ -9,7 +9,7 @@
     "build": "tsc",
     "publishme": "npm run build && npm publish --access=public && npm run bip",
     "test": "vitest run",
-    "test-interactive": "npx vitest --ui",
+    "test_interactive": "npx vitest --ui",
     "test:watch": "vitest"
   },
   "keywords": [],

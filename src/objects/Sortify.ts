@@ -1,9 +1,9 @@
-export function sortify(value: any): string {
+export function sortify(value: any, sortArrays: boolean = false): string {
     const seen = new WeakSet();
-    return JSON.stringify(normalize(value, seen));
+    return JSON.stringify(normalize(value, seen, sortArrays));
 }
 
-function normalize(value: any, seen: WeakSet<object>): any {
+function normalize(value: any, seen: WeakSet<object>, sortArrays: boolean = false): any {
     // Primitives
     if (value === null || typeof value !== "object") return value;
 
@@ -17,14 +17,15 @@ function normalize(value: any, seen: WeakSet<object>): any {
     if (Array.isArray(value)) {
         // Normalize and sort arrays by their stringified form
         const normalizedItems = value.map((v) => normalize(v, seen));
-        return normalizedItems;
-        /*
-        return normalizedItems.sort((a, b) => {
-            const sa = JSON.stringify(a);
-            const sb = JSON.stringify(b);
-            return sa.localeCompare(sb);
-        });
-        */
+        if (sortArrays) {
+            return normalizedItems.sort((a, b) => {
+                const sa = JSON.stringify(a);
+                const sb = JSON.stringify(b);
+                return sa.localeCompare(sb);
+            });
+        } else {
+            return normalizedItems;
+        }
     } else {
         // Sort object keys
         const sorted: any = {};
