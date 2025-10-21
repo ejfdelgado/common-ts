@@ -1,5 +1,5 @@
-import { MyTuples } from "./MyTuples";
-import { sortify } from "./Sortify";
+import { MyTuples } from "./MyTuples.js";
+import { sortify } from "./Sortify.js";
 
 export interface PruebaDataType {
     f: any;
@@ -112,13 +112,13 @@ export const testTuples = async () => {
     };
 
     // Las funciones se deben ignorar
-    pruebas[0].i.p = function () { };
+    pruebas[0]!.i.p = function () { };
     // Los loops se deben ignorar
-    pruebas[5].i.loop = pruebas[5].i;
+    pruebas[5]!.i.loop = pruebas[5]!.i;
 
     for (let i = 0; i < pruebas.length; i++) {
         console.log(`Prueba ${i + 1} ----------------------------------------------`);
-        const prueba = pruebas[i];
+        const prueba = pruebas[i]!;
         const tuplas = MyTuples.getTuples(prueba.i);
         //console.log(JSON.stringify(tuplas, null, 4));
         const referencia = sortify(prueba.i);
@@ -217,7 +217,7 @@ export const testConverter = () => {
     ];
 
     for (let i = 0; i < pruebas.length; i++) {
-        const actual = pruebas[i];
+        const actual = pruebas[i]!;
         const input = actual.i;
         const o = actual.o;
         const response = MyTuples.convertFromBD(input);
@@ -242,7 +242,7 @@ export const testArray = () => {
         { a: [4, 8, 9], b: [], r: [] },
     ];
     for (let i = 0; i < restas.length; i++) {
-        const prueba = restas[i];
+        const prueba = restas[i]!;
         const response = MyTuples.restarArreglo(prueba.a, prueba.b);
         const responseTxt = sortify(response);
         const refTxt = sortify(prueba.r);
@@ -251,7 +251,7 @@ export const testArray = () => {
         }
     }
     for (let i = 0; i < interseccion.length; i++) {
-        const prueba = interseccion[i];
+        const prueba = interseccion[i]!;
         const response = MyTuples.intersecionArreglo(prueba.a, prueba.b);
         const responseTxt = sortify(response);
         const refTxt = sortify(prueba.r);
@@ -270,7 +270,7 @@ export const testArrayCompress = () => {
     ];
 
     for (let i = 0; i < casos.length; i++) {
-        const caso = casos[i];
+        const caso = casos[i]!;
         let myActual = null;
         let myRaw: any = null;
         try {

@@ -1,5 +1,5 @@
-import { SimpleObj } from "./SimpleObj"; 7
-import { sortify } from "./Sortify";
+import { SimpleObj } from "./SimpleObj.js";
+import { sortify } from "./Sortify.js";
 
 export function testGetValue() {
     const MY_CASES = [
@@ -14,7 +14,7 @@ export function testGetValue() {
     ];
 
     for (let i = 0; i < MY_CASES.length; i++) {
-        const MY_CASE = MY_CASES[i];
+        const MY_CASE = MY_CASES[i]!;
         const obj = MY_CASE.obj;
         const key = MY_CASE.key;
         const def = MY_CASE.def;
@@ -34,7 +34,7 @@ export function testWriteValue() {
         { obj: { players: {} }, key: "players.P12", val: { name: "Edgar" }, exp: { players: { P12: { name: "Edgar" } } } },
     ];
     for (let i = 0; i < MY_CASES.length; i++) {
-        const MY_CASE = MY_CASES[i];
+        const MY_CASE = MY_CASES[i]!;
         const obj = MY_CASE.obj;
         const key = MY_CASE.key;
         const val = MY_CASE.val;

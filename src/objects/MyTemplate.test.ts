@@ -1,5 +1,5 @@
-import { CsvFormatterFilters } from "./CsvFormatterFilters";
-import { MyTemplate } from "./MyTemplate";
+import { CsvFormatterFilters } from "./CsvFormatterFilters.js";
+import { MyTemplate } from "./MyTemplate.js";
 
 
 export function templateTest() {
@@ -146,7 +146,7 @@ export function templateTest() {
     });
 
     for (let i = 0; i < cases.length; i++) {
-        const myCase = cases[i];
+        const myCase = cases[i]!;
         const actual = renderer.render(myCase.txt, myCase.data, myCase.skipUndefined === true);
         //console.log(actual);
         if (actual !== myCase.exp) {
