@@ -7,7 +7,9 @@
   "scripts": {
     "bip": "ffplay /sound/finish.mp3 -nodisp -nostats -hide_banner -autoexit",
     "build": "tsc",
-    "publishme": "npm run build && npm publish --access=public && npm run bip"
+    "publishme": "npm run build && npm publish --access=public && npm run bip",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +17,8 @@
   "devDependencies": {
     "@types/node": "^24.9.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
   }
 }
