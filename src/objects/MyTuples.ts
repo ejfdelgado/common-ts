@@ -18,15 +18,6 @@ export interface BatchDataType {
     total: number;
 };
 
-export const fakeProcessor = ({ min = 500, max = 1000 }) => {
-    return new Promise<void>((resolve) => {
-        const tiempo = min + Math.random() * (max - min);
-        setTimeout(() => {
-            resolve();
-        }, tiempo);
-    });
-};
-
 export class MyTuples {
     static TIPOS_BASICOS = ["string", "number", "boolean"];
     static arrayCompress(someArray: any[], maxLength: number = 65535) {

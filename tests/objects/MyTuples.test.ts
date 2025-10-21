@@ -14,7 +14,7 @@ describe("Tuple Handling", () => {
     const BATCH_SIZE = 3;
     const reverse = false;
     const show = false;
-    const useProcessor = ["none", "good", "bad"][0];
+    const useProcessor = ["none", "good", "bad", "random"][0];
     const pruebas: PruebaDataType[] = [
         {
             name: "Case 1",
@@ -125,6 +125,18 @@ describe("Tuple Handling", () => {
         });
     };
 
+    const getRandomProcessor = (min: number = 500, max: number = 1000) => {
+        const mockProcessorRandom = (payload: any) => {
+            return new Promise<void>((resolve, reject) => {
+                const tiempo = min + Math.random() * (max - min);
+                setTimeout(() => {
+                    resolve();
+                }, tiempo);
+            });
+        };
+        return mockProcessorRandom;
+    };
+
     const getBadProcessor = () => {
         let count = 0;
         let maxCount = 3;
@@ -180,9 +192,10 @@ describe("Tuple Handling", () => {
             });
             if (useProcessor == "bad") {
                 builder.setProcesor(getBadProcessor());
-            }
-            if (useProcessor == "good") {
+            } else if (useProcessor == "good") {
                 builder.setProcesor(mockProcessorGood);
+            } else if (useProcessor == "random") {
+                builder.setProcesor(getRandomProcessor());
             }
             let paths = Object.keys(tuplas);
             if (reverse) {
