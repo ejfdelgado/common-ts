@@ -198,9 +198,10 @@ export const testTuples = async () => {
     }
 }
 
-export const testConverter = () => {
+describe("IO Converter", () => {
     const pruebas = [
         {
+            name: "Case 1",
             i: [
                 { k: "6543:fdgfd.ghgf.t", v: 2 },
                 { k: "6543:fdgfd.ghgf", v: {} },
@@ -213,6 +214,7 @@ export const testConverter = () => {
             }
         },
         {
+            name: "Case 2",
             i: [],
             o: {},
         }
@@ -226,11 +228,11 @@ export const testConverter = () => {
 
         const oText = sortify(o);
         const responseTxt = sortify(response);
-        if (oText != responseTxt) {
-            throw new Error(`Prueba fallida ${oText} != ${responseTxt}`);
-        }
+        it(actual.name, () => {
+            expect(responseTxt).toBe(oText);
+        });
     }
-};
+});
 
 describe("Array operations", () => {
     const restas = [
