@@ -73,31 +73,24 @@ describe("Tuple Handling", () => {
                 ]
             }
         },
-        /*
-        {//timeout
+        {
             name: "Case 7",
             f: [{ e: 3 }, 5, 8, [9]],
             i: [{ e: 3 }, 5, 8, [9]],
             e: { "+": [], "-": [], "*": [] },
         },
-        */
-        /*
-        {//timeout
+        {
             name: "Case 8",
             f: { a: 5, b: [], c: {} },
             i: { a: 5, b: [], c: {} },
             e: { "+": [], "-": [], "*": [] },
         },
-        */
-        /*
-        {//timeout
+        {
             name: "Case 9",
             f: [1, 2, 3, 4],
             i: [1, 2, 3, 4],
             e: { "+": [], "-": [], "*": [] },
         },
-        */
-        /*
         {
             name: "Case 10",
             f: ["1", "2", "3"],
@@ -110,6 +103,7 @@ describe("Tuple Handling", () => {
             i: [true, false, true],
             e: { "+": [], "-": [], "*": [] },
         },
+        /*
         {
             name: "Case 12",
             f: { a: [5, 6, 7], b: { n: true, h: false, ert: "dzfgfsdgfsdg" }, c: [{ g: 5 }, { g: 6 }, { g: 7 }] },
@@ -177,32 +171,6 @@ describe("Tuple Handling", () => {
             let buffer: any = {};
             const builder = MyTuples.getBuilder();
             const builder2 = MyTuples.getBuilder();
-            if (useProcessor == "bad") {
-                builder.setProcesor(getBadProcessor());
-            }
-            if (useProcessor == "good") {
-                builder.setProcesor(mockProcessorGood);
-            }
-            let llaves1 = Object.keys(tuplas);
-            if (reverse) {
-                llaves1 = llaves1.reverse();
-            }
-            llaves1.forEach(element => {
-                buffer[element] = tuplas[element];
-                if (Object.keys(buffer).length >= BATCH_SIZE) {
-                    builder.build(buffer);
-                    builder2.build(buffer);
-                    buffer = {};
-                }
-            });
-            if (Object.keys(buffer).length > 0) {
-                builder.build(buffer);
-                builder2.build(buffer);
-                buffer = {};
-            }
-            const resultadoTxt = sortify(builder.end());
-            builder2.end();
-
             const indicadorActividad = new Promise<void>((resolve) => {
                 builder.addActivityListener((status: any) => {
                     if (!status) {
@@ -213,6 +181,33 @@ describe("Tuple Handling", () => {
                     }
                 });
             });
+            if (useProcessor == "bad") {
+                builder.setProcesor(getBadProcessor());
+            }
+            if (useProcessor == "good") {
+                builder.setProcesor(mockProcessorGood);
+            }
+            let paths = Object.keys(tuplas);
+            if (reverse) {
+                paths = paths.reverse();
+            }
+            // Iterate all paths
+            paths.forEach(path => {
+                buffer[path] = tuplas[path];
+                if (Object.keys(buffer).length >= BATCH_SIZE) {
+                    builder.build(buffer);
+                    builder2.build(buffer);
+                    buffer = {};
+                }
+            });
+            // The last portion if it exists
+            if (Object.keys(buffer).length > 0) {
+                builder.build(buffer);
+                builder2.build(buffer);
+                buffer = {};
+            }
+            const resultadoTxt = sortify(builder.end());
+            builder2.end();
             const differences = builder.trackDifferences(prueba.f);
             //console.log(JSON.stringify(differences, null, 4));
             await indicadorActividad;

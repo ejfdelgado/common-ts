@@ -450,6 +450,9 @@ export class MyTuples {
                     myFreeze = JSON.stringify(nuevo);
                     pending.push(batch);
                     startProcess();
+                } else {
+                    // Nothing to do...
+                    setActivityStatus(false);
                 }
 
                 return batch;
