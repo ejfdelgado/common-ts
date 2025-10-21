@@ -1,5 +1,7 @@
-import { MyTuples } from "./MyTuples.js";
-import { sortify } from "./Sortify.js";
+import { describe, it, expect } from "vitest";
+
+import { MyTuples } from "../../src/objects/MyTuples.js";
+import { sortify } from "../../src/objects/Sortify.js";
 
 export interface PruebaDataType {
     f: any;
@@ -261,12 +263,12 @@ export const testArray = () => {
     }
 }
 
-export const testArrayCompress = () => {
+describe("Array compress", () => {
     const casos = [
-        { i: { someArray: [1, 23, 3, 4], maxLength: 5 }, myExpected: ["[1]", "[23]", "[3,4]"] },
-        { i: { someArray: [1, 230, 3, 4], maxLength: 5 }, myExpected: ["[1]", "[230]", "[3,4]"] },
-        { i: { someArray: [1, 2301, 3, 4], maxLength: 5 }, myExpected: "Can't compress with size 5 one item has size 4" },
-        { i: { someArray: [1, 2, 3, 4], maxLength: 5 }, myExpected: ["[1,2]", "[3,4]"] },
+        { name: "Case 1", i: { someArray: [1, 23, 3, 4], maxLength: 5 }, myExpected: ["[1]", "[23]", "[3,4]"] },
+        { name: "Case 2", i: { someArray: [1, 230, 3, 4], maxLength: 5 }, myExpected: ["[1]", "[230]", "[3,4]"] },
+        { name: "Case 3", i: { someArray: [1, 2301, 3, 4], maxLength: 5 }, myExpected: "Can't compress with size 5 one item has size 4" },
+        { name: "Case 4", i: { someArray: [1, 2, 3, 4], maxLength: 5 }, myExpected: ["[1,2]", "[3,4]"] },
     ];
 
     for (let i = 0; i < casos.length; i++) {
@@ -281,25 +283,21 @@ export const testArrayCompress = () => {
         }
 
         const myExpected = sortify(caso.myExpected);
-        if (myExpected != myActual) {
-            throw Error(`Compresion fallida expected: ${myExpected} actual ${myActual}`);
-        } else {
-            console.log(`Case compress ${i + 1} Ok`);
-        }
+        it(caso.name + " compress", () => {
+            expect(myActual).toBe(myExpected);
+        });
 
         if (caso.myExpected instanceof Array) {
             // Se valida la descompresión
             const uncompressed = MyTuples.arrayUnCompress(myRaw);
             const unCompressExpected = sortify(caso.i.someArray);
             const unCompressActual = sortify(uncompressed);
-            if (unCompressExpected != unCompressActual) {
-                throw Error(`Descompresion fallida expected: ${unCompressExpected} actual ${unCompressActual}`);
-            } else {
-                console.log(`Case uncompress ${i + 1} Ok`);
-            }
+            it(caso.name + " uncompress", () => {
+                expect(unCompressActual).toBe(unCompressExpected);
+            });
         }
     }
-}
+});
 
 export const testSimpleTuples = () => {
 
