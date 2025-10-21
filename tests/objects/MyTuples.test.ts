@@ -232,36 +232,36 @@ export const testConverter = () => {
     }
 };
 
-export const testArray = () => {
+describe("Array operations", () => {
     const restas = [
-        { a: [1, 3, 5], b: [3], r: [1, 5] },
-        { a: [], b: [4, 7], r: [] },
-        { a: [3, 4, 5], b: [], r: [3, 4, 5] },
+        { name: "Substraction 1", a: [1, 3, 5], b: [3], r: [1, 5] },
+        { name: "Substraction 2", a: [], b: [4, 7], r: [] },
+        { name: "Substraction 3", a: [3, 4, 5], b: [], r: [3, 4, 5] },
     ];
     const interseccion = [
-        { a: [1, 3, 5], b: [3], r: [3] },
-        { a: [], b: [4, 8, 9], r: [] },
-        { a: [4, 8, 9], b: [], r: [] },
+        { name: "Intersection 1", a: [1, 3, 5], b: [3], r: [3] },
+        { name: "Intersection 2", a: [], b: [4, 8, 9], r: [] },
+        { name: "Intersection 3", a: [4, 8, 9], b: [], r: [] },
     ];
     for (let i = 0; i < restas.length; i++) {
         const prueba = restas[i]!;
         const response = MyTuples.restarArreglo(prueba.a, prueba.b);
         const responseTxt = sortify(response);
         const refTxt = sortify(prueba.r);
-        if (responseTxt != refTxt) {
-            throw Error(`Resta fallida ${JSON.stringify(prueba)}`);
-        }
+        it(prueba.name, () => {
+            expect(responseTxt).toBe(refTxt);
+        });
     }
     for (let i = 0; i < interseccion.length; i++) {
         const prueba = interseccion[i]!;
         const response = MyTuples.intersecionArreglo(prueba.a, prueba.b);
         const responseTxt = sortify(response);
         const refTxt = sortify(prueba.r);
-        if (responseTxt != refTxt) {
-            throw Error(`Interseccion fallida ${JSON.stringify(prueba)}`);
-        }
+        it(prueba.name, () => {
+            expect(responseTxt).toBe(refTxt);
+        });
     }
-}
+});
 
 describe("Array compress", () => {
     const casos = [
