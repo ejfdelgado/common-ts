@@ -439,7 +439,7 @@ export class MyTuples {
                 }
 
                 const compFun = (a: KeyValDataType, b: KeyValDataType) => {
-                    return b.k.length - a.k.length;
+                    return a.k.length - b.k.length;
                 };
                 batch['*'].sort(compFun);
                 batch['-'].sort(compFun);

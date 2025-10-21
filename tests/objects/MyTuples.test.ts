@@ -22,14 +22,6 @@ describe("Tuple Handling", () => {
             i: {},
             e: { "+": [{ "k": "a", "v": 2 }], "-": [], "*": [] },//solo agregar
         },
-        /*
-        {//timeout
-            name: "Case 2a",
-            f: [{}],
-            i: [{ "0": true }],
-            e: { "+": [], "-": [{ "k": "0.0" }], "*": [] },//solo quitar
-        },
-        */
         {
             name: "Case 2",
             f: [{}],
@@ -103,20 +95,25 @@ describe("Tuple Handling", () => {
             i: [true, false, true],
             e: { "+": [], "-": [], "*": [] },
         },
-        /*
         {
             name: "Case 12",
-            f: { a: [5, 6, 7], b: { n: true, h: false, ert: "dzfgfsdgfsdg" }, c: [{ g: 5 }, { g: 6 }, { g: 7 }] },
             i: { a: [5, 6, 7], b: { n: true, h: false, ert: "dzfggfsdg" }, c: [{ g: 6 }, { g: 7 }] },
-            e: { "*": [{ "k": "b.ert", "v": "dzfgfsdgfsdg" }, { "k": "c.0.g", "v": 5 }, { "k": "c.1.g", "v": 6 }], "+": [{ "k": "c.2", "v": {} }, { "k": "c.2.g", "v": 7 }], "-": [] },
+            f: { a: [5, 6, 7], b: { n: true, h: false, ert: "dzfgfsdgfsdg" }, c: [{ g: 5 }, { g: 6 }, { g: 7 }] },
+            e: {
+                "*": [
+                    { "k": "b.ert", "v": "dzfgfsdgfsdg" },
+                    { "k": "c.0.g", "v": 5 },
+                    { "k": "c.1.g", "v": 6 },
+                ],
+                "+": [
+                    { "k": "c.2", "v": {} },
+                    { "k": "c.2.g", "v": 7 },
+                ],
+                "-": [
+
+                ]
+            },
         },
-        {
-            name: "Case 13",
-            f: { a: { 1: 6, 4: 5 } },
-            i: { a: { 1: 6, 4: 5 } },
-            e: { "+": [], "-": [], "*": [] },
-        },
-        */
     ];
 
     const mockProcessorGood = (payload: any) => {
@@ -212,7 +209,7 @@ describe("Tuple Handling", () => {
             //console.log(JSON.stringify(differences, null, 4));
             await indicadorActividad;
             const afectado = builder2.affect(differences);
-            //console.log(JSON.stringify(afectado, null, 4));
+
             prueba.e.r = differences.r;
             prueba.e.t = differences.t;
             prueba.e.total = differences.total;
@@ -225,11 +222,13 @@ describe("Tuple Handling", () => {
                 console.log(resultadoTxt);
             }
 
+            // Here we verify only the initial state
             expect(resultadoTxt).toBe(referencia);
 
             // Changes can have different representation
             //expect(differencesTxt).toBe(sortify(prueba.e, true));
 
+            // Here we compare the final state
             expect(sortify(afectado)).toBe(sortify(prueba.f));
         }, 5000);
     });
