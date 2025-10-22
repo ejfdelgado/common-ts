@@ -129,6 +129,36 @@ describe("Tuple Handling", () => {
                 ]
             },
         },
+        {
+            name: "Case 13",
+            i: {},
+            f: {
+                parent: {
+                    name: "Fernando",
+                    sons: [
+                        {
+                            name: "Gloria"
+                        },
+                        {
+                            name: "Edgar"
+                        }
+                    ]
+                }
+            },
+            e: {
+                "*": [],
+                "+": [
+                    { "k": "parent", "v": {} },
+                    { "k": "parent.name", "v": "Fernando" },
+                    { "k": "parent.sons", "v": [] },
+                    { "k": "parent.sons.0", "v": {} },
+                    { "k": "parent.sons.1", "v": {} },
+                    { "k": "parent.sons.0.name", "v": "Gloria" },
+                    { "k": "parent.sons.1.name", "v": "Edgar" }
+                ],
+                "-": [],
+            }
+        }
     ];
 
     const mockProcessorGood = (payload: any) => {
