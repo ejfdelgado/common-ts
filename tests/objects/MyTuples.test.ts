@@ -18,32 +18,32 @@ describe("Tuple Handling", () => {
     const pruebas: PruebaDataType[] = [
         {
             name: "Case 1",
-            f: { a: 2 },
             i: {},
+            f: { a: 2 },
             e: { "+": [{ "k": "a", "v": 2 }], "-": [], "*": [] },//solo agregar
         },
         {
             name: "Case 2",
-            f: [{}],
             i: [{ "name": true }],
+            f: [{}],
             e: { "+": [], "-": [{ "k": "0.name" }], "*": [] },//solo quitar
         },
         {
             name: "Case 3",
-            f: [true],
             i: [false],
+            f: [true],
             e: { "+": [], "-": [], "*": [{ "k": "0", "v": true }] },//solo modificar
         },
         {
             name: "Case 4",
-            f: { a: 1, b: "t", c: true, e: null, f: "soy nuevo" },
             i: { a: 1, b: "t", c: true, d: false, e: null, f: undefined },
+            f: { a: 1, b: "t", c: true, e: null, f: "soy nuevo" },
             e: { "+": [{ "k": "f", "v": "soy nuevo" }], "-": [{ "k": "d" }], "*": [] }//agregar y quitar
         },
         {
             name: "Case 5",
-            f: { a: [], b: { g: 6, h: 7 } },
             i: { a: [2], b: { g: 5 } },
+            f: { a: [], b: { g: 6, h: 7 } },
             e: { "+": [{ "k": "b.h", "v": 7 }], "-": [{ "k": "a.0" }], "*": [{ "k": "b.g", "v": 6 }] }//agregar, quitar y modificar
         },
         {
@@ -67,32 +67,32 @@ describe("Tuple Handling", () => {
         },
         {
             name: "Case 7",
-            f: [{ e: 3 }, 5, 8, [9]],
             i: [{ e: 3 }, 5, 8, [9]],
+            f: [{ e: 3 }, 5, 8, [9]],
             e: { "+": [], "-": [], "*": [] },
         },
         {
             name: "Case 8",
-            f: { a: 5, b: [], c: {} },
             i: { a: 5, b: [], c: {} },
+            f: { a: 5, b: [], c: {} },
             e: { "+": [], "-": [], "*": [] },
         },
         {
             name: "Case 9",
-            f: [1, 2, 3, 4],
             i: [1, 2, 3, 4],
+            f: [1, 2, 3, 4],
             e: { "+": [], "-": [], "*": [] },
         },
         {
             name: "Case 10",
-            f: ["1", "2", "3"],
             i: ["1", "2", "3"],
+            f: ["1", "2", "3"],
             e: { "+": [], "-": [], "*": [] },
         },
         {
             name: "Case 11",
-            f: [true, false, true],
             i: [true, false, true],
+            f: [true, false, true],
             e: { "+": [], "-": [], "*": [] },
         },
         {
@@ -350,38 +350,55 @@ describe("Array compress", () => {
     }
 });
 
-export const testSimpleTuples = () => {
-
-    const mockProcessorGood = (payload: any) => {
-        return new Promise<void>((resolve, reject) => {
-            setTimeout(() => {
-                console.log(`Processing ${JSON.stringify(payload, null, 4)} OK`);
-                resolve();
-            }, 0);
-        });
+describe("Tuple manipulation", () => {
+    const builderConfig = {
+        MAX_SEND_SIZE: 1000,
+        LOW_PRESSURE_MS: 0,
+        BACK_OFF_MULTIPLIER: 0,
     };
 
-    let model: any = { persona: { nombre: "Edgar", edad: 38 } };
-    const builderConfig = { MAX_SEND_SIZE: 1000, LOW_PRESSURE_MS: 0, BACK_OFF_MULTIPLIER: 0 };
-    const builder = MyTuples.getBuilder(builderConfig);
-    builder.setProcesor(mockProcessorGood);
-    builder.build({});
-    const res1 = builder.end();
-    model.persona.nombre = "Edgar Delgado";
-    delete model.persona.edad;
-    model.persona.color = "red";
-    model.persona.animal = "dog";
-    //console.log(res1);
 
-    const differences1 = builder.trackDifferences(model);
-    const afectado1 = builder.affect(differences1);
-    console.log(afectado1);
+    it("Empty object goes to the initial state", () => {
+        const model: any = {
+            persona: {
+                nombre: "Edgar",
+                edad: 38,
+            },
+        };
+        const builder = MyTuples.getBuilder(builderConfig);
+        builder.build({});
+        //Here freeze the version
+        builder.end();
 
-    const differences2 = builder.trackDifferences({});
-    const afectado2 = builder.affect(differences2);
-    console.log(afectado2);
+        const differences1 = builder.trackDifferences(model);
+        const afectado1 = builder.affect(differences1);
+        expect(sortify(afectado1)).toBe(sortify(model));
+    });
 
-    const differences3 = builder.trackDifferences({ a: 1 });
-    const afectado3 = builder.affect(differences3);
-    console.log(afectado3);
-}
+    it("Empty object goes to the initial state and add extra modifications", () => {
+        const model: any = {
+            persona: {
+                nombre: "Edgar",
+                edad: 38,
+            },
+        };
+        const builder = MyTuples.getBuilder(builderConfig);
+        builder.build({});
+        //Here freeze the version
+        builder.end();
+
+        const differences1 = builder.trackDifferences(model);
+        builder.affect(differences1);
+
+        //Perform modifications
+        model.persona.nombre = "Edgar Delgado";
+        delete model.persona.edad;
+        model.persona.color = "red";
+        model.persona.animal = "dog";
+
+        const differences2 = builder.trackDifferences(model);
+        const afectado2 = builder.affect(differences2);
+
+        expect(sortify(afectado2)).toBe(sortify(model));
+    });
+});
