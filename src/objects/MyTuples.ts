@@ -319,6 +319,29 @@ export class MyTuples {
             return Math.floor(Math.random() * Math.pow(10, TAMANIO_ALEATORIO)).toString(36);
         };
 
+        const copyKeyVal = (keyVal: any) => {
+            let { k, v } = keyVal;
+            if (typeof v == "object" && v !== null) {
+                if (v instanceof Array) {
+                    v = [];
+                } else {
+                    v = {};
+                }
+            }
+            return { k, v };
+        };
+
+        const copyBatch = (orig: BatchDataType): BatchDataType => {
+            return {
+                r: orig.r,
+                t: orig.t,
+                total: orig.total,
+                '*': orig['*'].map((keyVal: any) => { return copyKeyVal(keyVal); }),
+                '+': orig['+'].map((keyVal: any) => { return copyKeyVal(keyVal); }),
+                '-': orig['-'],
+            };
+        };
+
         return {
             setBlackKeyPatterns,
             isOwnChange,
@@ -334,6 +357,7 @@ export class MyTuples {
                 return JSON.parse(myFreeze);
             },
             affect: (batch: BatchDataType, listenerKeys: any[] = [], callback: null | Function = null) => {
+                batch = copyBatch(batch);
                 const tuplas1 = MyTuples.getTuples(JSON.parse(myFreeze));
                 const llavesBorrar: any[] = batch["-"];
                 const llavesNuevasModificadas = batch["*"].concat(batch["+"]);

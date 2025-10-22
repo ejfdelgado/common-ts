@@ -48,21 +48,38 @@ describe("Tuple Handling", () => {
         },
         {
             name: "Case 6",
-            i: { a: { b: { c: [3, { h: "hola" }] } } },
-            f: { a: { b: { c: [{ h: "hola", i: "como", j: "estas" }] } } },
+            i: {
+                a: {
+                    b: {
+                        c: [
+                            3,
+                            { h: "hola" },
+                        ]
+                    }
+                }
+            },
+            f: {
+                a: {
+                    b: {
+                        c: [
+                            { h: "hola", i: "como", j: "estas" }
+                        ]
+                    }
+                }
+            },
             e: {
-                "+": [
-                    { "k": "a.b.c.1.h", "v": "hola" },
-                    { "k": "a.b.c.1.i", "v": "como" },
-                    { "k": "a.b.c.1.j", "v": "estas" }
-                ],
                 "-": [
                     { "k": "a.b.c.0" },
                     { "k": "a.b.c.1.h" },
                 ],
                 "*": [
                     { "k": "a.b.c.0", "v": {} },
-                ]
+                ],
+                "+": [
+                    { "k": "a.b.c.1.h", "v": "hola" },
+                    { "k": "a.b.c.1.i", "v": "como" },
+                    { "k": "a.b.c.1.j", "v": "estas" }
+                ],
             }
         },
         {
@@ -106,7 +123,7 @@ describe("Tuple Handling", () => {
                     { "k": "c.1.g", "v": 6 },
                 ],
                 "+": [
-                    { "k": "c.2", "v": {} },
+                    { "k": "c.2", "v": {} },//{"k":"c.2","v":{"g":7}}
                     { "k": "c.2.g", "v": 7 },
                 ],
                 "-": [
@@ -239,7 +256,10 @@ describe("Tuple Handling", () => {
             expect(resultadoTxt).toBe(referencia);
 
             // Changes can have different representation
-            //expect(differencesTxt).toBe(sortify(prueba.e, true));
+            prueba.e.r = differences.r;
+            prueba.e.t = differences.t;
+            prueba.e.total = differences.total;
+            expect(differencesTxt).toBe(sortify(prueba.e, true));
 
             // Here we compare the final state
             expect(sortify(afectado)).toBe(sortify(prueba.f));
