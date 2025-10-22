@@ -414,9 +414,8 @@ describe("Tuple manipulation", () => {
             },
         };
         const builder = MyTuples.getBuilder(builderConfig);
-        builder.build({});
         //Here freeze the version
-        builder.end();
+        builder.start({});
 
         const differences1 = builder.trackDifferences(model);
         const afectado1 = builder.affect(differences1);
@@ -431,9 +430,8 @@ describe("Tuple manipulation", () => {
             },
         };
         const builder = MyTuples.getBuilder(builderConfig);
-        builder.build({});
         //Here freeze the version
-        builder.end();
+        builder.start({});
 
         const differences1 = builder.trackDifferences(model);
         builder.affect(differences1);

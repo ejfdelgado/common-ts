@@ -123,7 +123,7 @@ export class MyTuples {
         visitor(o);
         return response;
     }
-    static getObject(t1: any, response: any = {}) {
+    static getObject(t1: { [key: string]: any }, response: any = {}) {
         const llaves = Object.keys(t1);
         for (let i = 0; i < llaves.length; i++) {
             const llave = llaves[i]!;
@@ -342,20 +342,35 @@ export class MyTuples {
             };
         };
 
+        const build = (buffer: { [key: string]: any }) => {
+            /*
+            It receives an object of key value tuples like { "a.name": "Edgar" }
+            */
+            resultado = MyTuples.getObject(buffer, resultado);
+        };
+        const end = () => {
+            if (!resultado.t) {
+                resultado.t = {};
+            }
+            myFreeze = JSON.stringify(resultado.t);
+            return JSON.parse(myFreeze);
+        };
+
         return {
             setBlackKeyPatterns,
             isOwnChange,
             addActivityListener,
-            build: (buffer: any) => {
-                resultado = MyTuples.getObject(buffer, resultado);
-            },
-            end: () => {
-                if (!resultado.t) {
-                    resultado.t = {};
+            start: (initial: any) => {
+                if (typeof initial == "object" && initial != null) {
+                    const tuplas = MyTuples.getTuples(initial);
+                    build(tuplas);
+                } else {
+                    build({});
                 }
-                myFreeze = JSON.stringify(resultado.t);
-                return JSON.parse(myFreeze);
+                end();
             },
+            build,
+            end,
             affect: (batch: BatchDataType, listenerKeys: any[] = [], callback: null | Function = null) => {
                 batch = copyBatch(batch);
                 const tuplas1 = MyTuples.getTuples(JSON.parse(myFreeze));
