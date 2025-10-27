@@ -1,8 +1,12 @@
 {
   "name": "ejfdelgado-common-ts",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "scripts": {
     "bip": "ffplay /sound/finish.mp3 -nodisp -nostats -hide_banner -autoexit",
