@@ -4,6 +4,20 @@ import { SimpleObj } from "./SimpleObj.js";
 const TAMANIO_ALEATORIO = 10;
 const MAX_BUFFER_CHANGES = 50;
 
+const compFun = (a: KeyValDataType, b: KeyValDataType) => {
+    return a.k.length - b.k.length;
+};
+
+const compFunInverted = (a: KeyValDataType, b: KeyValDataType) => {
+    return b.k.length - a.k.length;
+};
+
+const assureSorted = (batch: BatchDataType) => {
+    batch['*'].sort(compFun);
+    batch['-'].sort(compFunInverted);
+    batch['+'].sort(compFun);
+};
+
 export interface KeyValDataType {
     k: string;
     v?: any;
@@ -373,6 +387,7 @@ export class MyTuples {
             end,
             affect: (batch: BatchDataType, listenerKeys: any[] = [], callback: null | Function = null) => {
                 batch = copyBatch(batch);
+                assureSorted(batch);
                 const tuplas1 = MyTuples.getTuples(JSON.parse(myFreeze));
                 const llavesBorrar: any[] = batch["-"];
                 const llavesNuevasModificadas = batch["*"].concat(batch["+"]);
@@ -468,12 +483,7 @@ export class MyTuples {
                     }
                 }
 
-                const compFun = (a: KeyValDataType, b: KeyValDataType) => {
-                    return a.k.length - b.k.length;
-                };
-                batch['*'].sort(compFun);
-                batch['-'].sort(compFun);
-                batch['+'].sort(compFun);
+                assureSorted(batch);
 
                 batch.total = batch['*'].length + batch['-'].length + batch['+'].length;
                 if (batch.total > 0) {
