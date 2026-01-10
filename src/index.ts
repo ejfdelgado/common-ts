@@ -5,3 +5,4 @@ export * from "./objects/CsvWithFilters.js";
 export * from "./objects/CsvFormatter.js";
 export * from "./objects/MyTemplate.js";
 export * from "./objects/MyTuples.js";
+export * from "./objects/types.js";
