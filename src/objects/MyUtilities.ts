@@ -38,17 +38,20 @@ export class MyUtilities {
             pageType: partes ? partes[1] : "default",
         };
     }
-    static partirTexto(q: string, buscable: boolean = true, permisivo: boolean = false) {
+    static partirTexto(q: string, buscable: boolean = true, permisivo: boolean = false): string[] {
         //solo minusculas
         q = q.toLowerCase();
         //Quito caracteres no validos
         if (!permisivo) {
             q = q.replace(/[^\w\d\sá-úü]/g, '');
         }
+
+        //Remove emojis
+        q = q.replace(/[\p{Extended_Pictographic}\u200D\uFE0F]/gu, '');
         //Reemplazar tildes dieresis 
         q = q.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-        let tokens = q.split(/\s+/);
+        let tokens: string[] = q.split(/\s+/);
         // Elimino textos con tamaño pequeño
         tokens = tokens.filter((word) => { return word.length >= MyUtilities.MIN_LENGTH_TOKENS });
 
