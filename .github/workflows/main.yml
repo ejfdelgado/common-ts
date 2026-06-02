@@ -9,6 +9,8 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name }}
+    permissions:
+      id-token: write
 
     steps:
       - name: Checkout repository
@@ -22,6 +24,7 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Mock ffplay for CI
         run: |
@@ -41,4 +44,4 @@ jobs:
         run: npm run build
 
       - name: Publish
-        run: npm publish --access=public
+        run: npm publish --provenance --access=public
