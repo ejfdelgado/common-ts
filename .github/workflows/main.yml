@@ -1,0 +1,44 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - pro
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Debug token and repo target
+        run: |
+          echo "Owner: ${{ github.repository_owner }}"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+
+      - name: Mock ffplay for CI
+        run: |
+          sudo tee /usr/local/bin/ffplay > /dev/null <<'EOF'
+          #!/bin/sh
+          exit 0
+          EOF
+          sudo chmod +x /usr/local/bin/ffplay
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish
+        run: npm publish --access=public
