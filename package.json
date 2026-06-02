@@ -17,6 +17,10 @@
     "test_interactive": "npx vitest --ui",
     "test:watch": "vitest"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ejfdelgado/common-ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
