@@ -4,6 +4,28 @@ import { SimpleObj } from "./SimpleObj.js";
 const TAMANIO_ALEATORIO = 10;
 const MAX_BUFFER_CHANGES = 50;
 
+export interface LiveModelConfigData {
+    roomName: string;
+    MAX_SEND_SIZE: number;
+    LOW_PRESSURE_MS: number;
+    BACK_OFF_MULTIPLIER: number;
+    START_BACKOFF: number;
+};
+
+export interface IBuilder {
+    setBlackKeyPatterns: (myBlack: any) => void;
+    isOwnChange: (cambio: BatchDataType) => boolean;
+    addActivityListener: (a: any) => () => void;
+    start: (initial: any) => void;
+    build: (buffer: {
+        [key: string]: any;
+    }) => void;
+    end: () => any;
+    affect: (batch: BatchDataType, listenerKeys?: any[], callback?: null | Function) => any;
+    setProcesor: (p: any) => void;
+    trackDifferences: (nuevo: any, listenerKeys?: any[], callback?: null | Function, filterRoutes?: any[]) => BatchDataType;
+};
+
 const compFun = (a: KeyValDataType, b: KeyValDataType) => {
     return a.k.length - b.k.length;
 };
@@ -156,7 +178,7 @@ export class MyTuples {
             return b.indexOf(value) >= 0;
         });
     }
-    static getBuilder(config: any = {}) {
+    static getBuilder(config: LiveModelConfigData): IBuilder {
         const START_BACKOFF = typeof config.START_BACKOFF == "number" ? config.START_BACKOFF : 0;
         const BACK_OFF_MULTIPLIER = typeof config.BACK_OFF_MULTIPLIER == "number" ? config.BACK_OFF_MULTIPLIER : 500;
         // Cuántas tuplas se pueden afectar en un llamado
