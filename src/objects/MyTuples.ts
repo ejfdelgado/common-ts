@@ -52,6 +52,7 @@ export interface BatchDataType {
     "-": KeyValDataType[];
     "*": KeyValDataType[];
     total: number;
+    orig?: string;
 };
 
 export class MyTuples {

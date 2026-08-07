@@ -1,0 +1,94 @@
+// Low pressure implementation in two ways...
+
+export function debounce(fn: Function, delay: number) {
+    let timer: number | null = null;
+
+    return (...args: any[]) => {
+        if (timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(() => fn(...args), delay)
+    }
+}
+
+/*
+IMPORTANT, the throttled function MUST be an async function, 
+otherwise it will not work!
+
+const GAP_ms = 500;
+Si quieres tener en cuenta solo "la primera" invocación 
+e ignorar las repetidas invocaciones con intervalos de menos de gap:
+new MyThrottle(GAP_ms, true);
+
+Si quieres tener en cuenta solo "la última" invocación entre 
+repetidas invocaciones con intervalos de menos de gap:
+new MyThrottle(GAP_ms, false);
+*/
+export class MyThrottle {
+
+    timeGap: number;
+    useFirst: boolean;
+    lastCalledTime: number;
+    isCalling: boolean;
+    isIgnoring: boolean;
+
+    constructor(timeGap: number, useFirst: boolean = true) {
+        this.timeGap = timeGap;
+        this.useFirst = useFirst;
+        this.lastCalledTime = 0;
+        this.isCalling = false;
+        this.isIgnoring = false;
+    }
+
+    throttle(
+        promisedFunction: (...args: any[]) => Promise<any>,
+        args: any[] = [],
+    ) {
+        const afterGap = () => {
+            if (this.useFirst) {
+                if (calledTime == this.lastCalledTime) {
+                    // Listen again
+                    this.isIgnoring = false;
+                }
+            } else {
+                this.isIgnoring = false;
+            }
+        };
+        const calledTime = new Date().getTime();
+        this.lastCalledTime = calledTime;
+        if (this.useFirst && this.isIgnoring) {
+            setTimeout(afterGap, this.timeGap);
+        }
+        if (this.isCalling || this.isIgnoring) {
+            // Ignore
+            return;
+        }
+        const afterCall = () => {
+            this.isCalling = false;
+        };
+        if (this.useFirst) {
+            // Use first
+            this.isCalling = true;
+            this.isIgnoring = true;
+            promisedFunction(...args)
+                .catch((err) => {
+                    console.error(err);
+                })
+                .finally(afterCall);
+            setTimeout(afterGap, this.timeGap);
+        } else {
+            // Use last
+            setTimeout(() => {
+                if (calledTime == this.lastCalledTime) {
+                    // Call!
+                    this.isCalling = true;
+                    promisedFunction(...args)
+                        .catch((err) => {
+                            console.error(err);
+                        })
+                        .finally(afterCall);
+                }
+            }, this.timeGap);
+        }
+    }
+}
