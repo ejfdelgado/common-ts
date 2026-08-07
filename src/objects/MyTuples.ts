@@ -180,11 +180,11 @@ export class MyTuples {
         });
     }
     static getBuilder(config: LiveModelConfigData): IBuilder {
-        const START_BACKOFF = typeof config.START_BACKOFF == "number" ? config.START_BACKOFF : 0;
-        const BACK_OFF_MULTIPLIER = typeof config.BACK_OFF_MULTIPLIER == "number" ? config.BACK_OFF_MULTIPLIER : 500;
+        const START_BACKOFF = typeof config?.START_BACKOFF == "number" ? config.START_BACKOFF : 0;
+        const BACK_OFF_MULTIPLIER = typeof config?.BACK_OFF_MULTIPLIER == "number" ? config.BACK_OFF_MULTIPLIER : 500;
         // Cuántas tuplas se pueden afectar en un llamado
-        const MAX_SEND_SIZE = typeof config.MAX_SEND_SIZE == "number" ? config.MAX_SEND_SIZE : 20;
-        const LOW_PRESSURE_MS = typeof config.LOW_PRESSURE_MS == "number" ? config.LOW_PRESSURE_MS : 1000;
+        const MAX_SEND_SIZE = typeof config?.MAX_SEND_SIZE == "number" ? config.MAX_SEND_SIZE : 20;
+        const LOW_PRESSURE_MS = typeof config?.LOW_PRESSURE_MS == "number" ? config.LOW_PRESSURE_MS : 1000;
 
         let blackKeyPatterns: any[] = [];
         let resultado: any = {};
