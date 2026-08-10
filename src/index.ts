@@ -8,3 +8,4 @@ export * from "./objects/MyTemplate.js";
 export * from "./objects/MyTuples.js";
 export * from "./objects/types.js";
 export * from "./objects/MyUtilities.js";
+export * from "./objects/MyThrottle.js";
